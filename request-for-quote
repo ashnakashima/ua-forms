@@ -1,0 +1,292 @@
+<div>
+  <script src="https://www.google.com/recaptcha/api.js" async="" defer="">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js">
+  </script>
+  <form id="requestForQuoteForm">
+   <h3>
+    Personal Information
+   </h3>
+   <label for="companyName">
+    Company Name*
+   </label>
+   <input type="text" id="companyName" name="companyName" required="">
+   <label for="firstName" style="display:">
+    First Name*
+   </label>
+   <input type="text" id="firstName" name="firstName" required="">
+   <label for="lastName">
+    Last Name*
+   </label>
+   <input type="text" id="lastName" name="lastName" required="">
+   <label for="streetAddress">
+    Street Address*
+   </label>
+   <input type="text" id="streetAddress" name="streetAddress" required="">
+   <div style="display: flex; gap: 10px;">
+    <div style="flex: 1;">
+     <label for="city">
+      City*
+     </label>
+     <input type="text" id="city" name="city" required="">
+    </div>
+    <div style="flex:1;">
+     <label for="state">
+      State*
+     </label>
+     <input type="text" id="state" name="state" required="">
+    </div>
+   </div>
+   <label for="email">
+    Email*
+   </label>
+   <input type="email" id="email" name="email" required="">
+   <label for="phoneNumber">
+    Phone Number*
+   </label>
+   <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required="">
+   <h3 style="margin-top: 50px;">
+    Project Information
+   </h3>
+   <label for="projectName">
+    Project Name
+   </label>
+   <input type="text" id="projectName" name="projectName">
+   <div style="display: flex; gap: 10px;">
+    <div style="flex: 1;">
+     <label for="locationCity">
+      Location City
+     </label>
+     <input type="text" id="locationCity" name="locationCity">
+    </div>
+    <div style="flex:1;">
+     <label for="locationState">
+      Location State
+     </label>
+     <input type="text" id="locationState" name="locationState">
+    </div>
+   </div>
+   <label for="quantity">
+    Quantity*
+   </label>
+   <input type="number" id="quantity" name="quantity" required="">
+   <div style="display: flex; gap: 10px;">
+    <div style="flex:1;">
+     <label for="requestedShipDateStart">
+      Requested Ship Date Start*
+     </label>
+     <input type="date" id="requestedShipDateStart" name="requestedShipDateStart" required="">
+    </div>
+    <div style="flex:1;">
+     <label for="requestedShipDateEnd">
+      Requested Ship Date End
+     </label>
+     <input type="date" id="requestedShipDateEnd" name="requestedShipDateEnd">
+    </div>
+   </div>
+   <label for="designType">
+    Design Type:*
+   </label>
+   <select id="designType" name="designType" required="">
+    <option value="">
+     Select one
+    </option>
+    <option value="customDesign">
+     Custom Design
+    </option>
+    <option value="uaDesign">
+     UA Design
+    </option>
+   </select>
+   <!-- UA Design Options -->
+   <div data-field="uaField" style="display: none;">
+    <h3 style="margin-top: 30px;">
+     UA Design
+    </h3>
+    <label for="uaProduct">
+     Select your UA Product:*
+    </label>
+    <select id="uaProduct" name="uaProduct">
+     <option value="">
+      Select one
+     </option>
+     <option value="trailer">
+      Trailer
+     </option>
+     <option value="tank">
+      Tank
+     </option>
+     <option value="baseFrames">
+      Base Frames and Skids
+     </option>
+     <option value="Complex Weldments">
+      Complex Weldments
+     </option>
+     <option value="sheetMetal">
+      Sheet Metal
+     </option>
+     <option value="fabricatedAssemblies">
+      Fabricated Assemblies
+     </option>
+    </select>
+    <label for="uaPartNumber">
+     Part Number
+    </label>
+    <input type="text" id="uaPartNumber" name="uaPartNumber">
+   </div>
+   <!-- Custom Design Options -->
+   <div data-field="customField" style="display: none;">
+    <h3 style="margin-top: 30px;">
+     Custom Design
+    </h3>
+    <p>
+     Custom designs must include all component level drawings and specifications if referenced in drawings.
+    </p>
+   </div>
+   <label for="fileAttachments">
+    Attach Reference Drawings and Specifications (if applicable)
+   </label>
+   <input type="file" id="fileAttachments" name="attachments" multiple="">
+   <label for="additionalComments" style="margin-top: 30px;">
+    Additional Questions or Comments
+   </label>
+   <textarea id="additionalComments" name="additionalComments" rows="5" style="resize: vertical;">   </textarea>
+   <div class="g-recaptcha" data-sitekey="6LdSm4UrAAAAAKgcfViN2wrseOvsqF6THqapRPc1">
+   </div>
+   <button type="submit" style="margin-top: 15px;">
+    Submit
+   </button>
+   <script>
+    window.addEventListener("DOMContentLoaded", () => {
+        console.log("JSZip available?", typeof JSZip !== "undefined");
+        console.log("we made it in");
+        const dropdown = document.getElementById("designType");
+        const customField = document.querySelector('[data-field="customField"]');
+        const uaField = document.querySelector('[data-field="uaField"]');
+        const uaProductSelect = document.getElementById("uaProduct");
+        dropdown.addEventListener("change", function () {
+            const selected = dropdown.value;
+            if (selected === "uaDesign") {
+                uaField.style.display = "block";
+                customField.style.display = "none";
+                uaProductSelect.setAttribute("required", "required");
+            } else if (selected === "customDesign") {
+                customField.style.display = "block";
+                uaField.style.display = "none";
+                uaProductSelect.removeAttribute("required");
+            } else {
+                uaField.style.display = "none";
+                customField.style.display = "none";
+            }
+        });
+        const form = document.getElementById("requestForQuoteForm");
+        if (form) {
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault(); // stop default submission
+                const formData = new FormData();
+                const inputs = form.querySelectorAll("input, select, textarea");
+                inputs.forEach((input) => {
+                    if (input.type === "file"){
+                        return;
+                    }else{
+                        formData.append(input.name, input.value);
+                    }
+                });
+                const fileInput = document.getElementById("fileAttachments");
+                console.log(fileInput);
+                if (fileInput && fileInput.files.length > 0) {
+                    console.log('THERE ARE MULTIPLE FILE ATTACHMENTS');
+                    console.log("ZIPPING FILES...");
+                    const zip = new JSZip();
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        // formData.append("attachments", fileInput.files[i]);
+                        const file = fileInput.files[i];
+                        zip.file(file.name, file);
+                    }
+                    const zipBlob = await zip.generateAsync({type: "blob"});
+                    formData.append("attachments", zipBlob, "attachments.zip");
+                }else{
+                    console.log("NO ATTACHMENTS PROVIDED");
+                    formData.append("attachments", "");
+                }
+                formData.append("submittedAt", new Date().toISOString());
+                const recaptchaResponse = grecaptcha.getResponse();
+                console.log(recaptchaResponse);
+                if(!recaptchaResponse){
+                    alert("Verify you are not a robot");
+                    return;
+                }
+                fetch("https://hooks.zapier.com/hooks/catch/3709084/u3x1alp/", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log("FORM WAS SUBMITTED")
+                        form.innerHTML = "<p style='font-size: 1.2em;'>Thank you for your request! Someone will get back to you shortly.</p>";
+                    } else {
+                        alert("Something went wrong. Please try again.");
+                    }
+                }).catch((error) => {
+                    console.error("Submission error:", error);
+                    alert("There was an error submitting the form.");
+                });
+            });
+        }
+    });
+   </script>
+  </form>
+ </div>
+
+
+
+
+                                                  
+CSS
+#requestForQuoteForm
+{
+	max-width:90% !important;
+	font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+#requestForQuoteForm label
+{
+	display:block !important;
+  font-size: medium;
+	margin-bottom:2px !important;
+	font-weight:lighter !important;
+}
+#requestForQuoteForm input,#requestForQuoteForm select
+{
+	width:100% !important;
+	padding:10px !important;
+	margin-bottom:20px !important;
+	border:1px solid #ccc !important;
+	border-radius:4px !important;
+	background-color:#f2f2f2 !important;
+	box-sizing:border-box !important;
+}
+#requestForQuote button[type="submit"]
+{
+	background-color:#333 !important;
+	color:white !important;
+	padding:12px 20px !important;
+	border:none !important;
+	border-radius:4px !important;
+	cursor:pointer !important;
+}
+#requestForQuoteForm button[type="submit"]:hover
+{
+	background-color:#ccc !important;
+}
+#requestForQuoteForm textarea
+{
+	width:100% !important;
+	padding:10px !important;
+	margin-bottom:20px !important;
+	border:1px solid #ccc !important;
+	border-radius:4px !important;
+	background-color:#f2f2f2 !important;
+	box-sizing:border-box !important;
+}
