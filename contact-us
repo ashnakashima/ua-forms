@@ -26,7 +26,7 @@
       <div class="g-recaptcha" data-sitekey="6LdSm4UrAAAAAKgcfViN2wrseOvsqF6THqapRPc1">
    </div>
    </div>
-   <button type="submit" style="margin-top: 15px;">
+   <button type="submit" style="margin-top: 15px;" id="submitbtn">
     Submit
    </button>
   </form>
@@ -126,8 +126,12 @@
 	box-sizing:border-box !important;
 }
 @media (max-width: 480px) {
-  #recaptchaWrapper .g-recaptcha {
+  #recaptchaWrapperTwo .g-recaptcha {
     transform: scale(0.80);
     transform-origin: 0 0;
+  }
+ #submitBtn {
+    display: block;
+    margin: 0 auto;
   }
 }
