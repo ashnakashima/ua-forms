@@ -1,0 +1,230 @@
+<div>
+  <script src="https://www.google.com/recaptcha/api.js" async="" defer="">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js">
+  </script>
+  <form id="requestForQuote">
+   <label for="RFQcompanyName">
+    Company Name*
+   </label>
+   <input type="text" id="RFQcompanyName" name="RFQcompanyName" required="">
+   <label for="RFQlocation">
+    Location*
+   </label>
+   <input type="text" id="RFQlocation" name="RFQlocation" required="">
+   <label for="RFQindustry">
+    Industry*
+   </label>
+   <input type="text" id="RFQindustry" name="RFQindustry" required="">
+   <label for="RFQcontactName">
+    Contact Name*
+   </label>
+   <input type="text" id="RFQcontactName" name="RFQcontactName" required="">
+   <label for="RFQemail">
+    Email*
+   </label>
+   <input type="email" id="RFQemail" name="RFQemail" required="">
+   <label for="RFQphoneNumber">
+    Phone Number*
+   </label>
+   <input type="tel" id="RFQphoneNumber" name="RFQphoneNumber" placeholder="(123) 456-7890" inputmode="numeric" maxlength="14" required="">
+   <label for="RFQproductType">
+    Product Type*
+   </label>
+   <input type="text" id="RFQproductType" name="RFQproductType" required="">
+   <label for="RFQestAnnualusage">
+    Estimated Annual Usage*
+   </label>
+   <input type="text" id="RFQestAnnualusage" name="RFQestAnnualusage" required="">
+   <label for="RFQquantity">
+    Order Quantity*
+   </label>
+   <input type="number" id="RFQquantity" name="RFQquantity" required="">
+   <label for="RFQengServices">
+    Engineering Services Required*
+   </label>
+   <select id="RFQengServices" name="RFQengServices" required="">
+    <option value="">
+     Select one
+    </option>
+    <option value="yesEngServices">
+     Yes
+    </option>
+    <option value="noEngServices">
+     No
+    </option>
+   </select>
+   <label for="RFQresponseDate">
+    Required Response Date*
+   </label>
+   <input type="date" id="RFQresponseDate" name="RFQresponseDate" required="">
+   <label for="RFQadditionalComments">
+    Additional Questions or Comments
+   </label>
+   <textarea id="RFQadditionalComments" name="RFQadditionalComments" rows="5" style="resize: vertical;">   </textarea>
+   <label for="RFQattachments">
+    Upload Files/Drawings
+   </label>
+   <input type="file" id="RFQattachments" name="RFQattachments" multiple="">
+   <label for="RAQhearAbout">
+    How did you hear about us?*
+   </label>
+   <select id="RAQhearAbout" name="RAQhearAbout" required="">
+    <option value="">
+     Select one
+    </option>
+    <option value="Search Engine">
+     Search Engine
+    </option>
+    <option value="Diesel Progress">
+     Diesel Progress
+    </option>
+    <option value="EGSA Powerline Quarterly">
+     EGSA Powerline Quarterly
+    </option>
+    <option value="Radio">
+     Radio
+    </option>
+    <option value="Ad">
+     Ad
+    </option>
+    <option value="Word of Mouth">
+     Word of Mouth
+    </option>
+    <option value="Other">
+     Other
+    </option>
+   </select>
+   <label for="RFQhearAboutOther">
+    Other (if selected above)
+   </label>
+   <input type="text" id="RFQhearAboutOther" name="RFQhearAboutOther">
+   <div id="recaptchaWrapper">
+    <div class="g-recaptcha" data-sitekey="6LdSm4UrAAAAAKgcfViN2wrseOvsqF6THqapRPc1">
+    </div>
+   </div>
+   <button type="submit" style="margin-top: 15px;" id="submitBtn">
+    Submit
+   </button>
+  </form>
+  <div id="recaptchaModal" style="
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto', sans-serif;
+">
+   <div style="
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  ">
+    <p style="font-size: 1.1em; margin-bottom: 20px;">
+     Please verify you're not a robot to continue.
+    </p>
+    <button onclick="document.getElementById('recaptchaModal').style.display='none'" style="
+      background-color: #000;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+    " onmouseover="this.style.backgroundColor='transparent'; this.style.color='black'; this.style.border='2px solid black';" onmouseout="this.style.backgroundColor='black'; this.style.color='white'; this.style.border='2px';">
+     CLOSE
+    </button>
+   </div>
+  </div>
+  <script>
+   window.addEventListener("DOMContentLoaded", () => {
+       const form = document.getElementById("requestForQuote");
+       const phoneInput = document.getElementById("RFQphoneNumber");
+       if(phoneInput){
+           phoneInput.addEventListener("input", function (e) {
+                let input = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                if (input.length > 10) input = input.slice(0, 10); // Max 10 digits
+                    let formatted = input;
+                    if (input.length > 6) {
+                        formatted = `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6)}`;
+                    } else if (input.length > 3) {
+                        formatted = `(${input.slice(0, 3)}) ${input.slice(3)}`;
+                    } else if (input.length > 0) {
+                        formatted = `(${input}`;
+                    }
+                e.target.value = formatted;
+            });
+        }
+            if(form){
+                form.addEventListener("submit", async (e) => {
+                   e.preventDefault(); //stops default submission
+                   const now = new Date();
+                   const yyyy = now.getFullYear();
+                   const mm = String(now.getMonth() + 1).padStart(2, '0');
+                   const dd = String(now.getDate()).padStart(2, '0');
+                   const timestamp = Date.now();
+                   const ticketID = `RFQ-${yyyy}-${mm}-${dd}-${timestamp}`;
+                   const phoneValue = phoneInput.value.trim();
+                    const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
+                    if (!phonePattern.test(phoneValue)) {
+                        alert("Please enter a valid phone number.")
+                        phoneInput.focus();
+                        return;
+                    }
+                   const formData = new FormData(form);
+                   formData.append("submittedAt", new Date().toISOString());
+                   formData.append("ticketID", ticketID)
+                   const fileInput = document.getElementById("RFQattachments");
+                    if (fileInput && fileInput.files.length > 0 && typeof JSZip !== "undefined") {
+                        const zip = new JSZip();
+                        for (let i = 0; i < fileInput.files.length; i++) {
+                            console.log('zipping file ', i)
+                            const file = fileInput.files[i];
+                            zip.file(file.name, file);
+                        }
+                    try {
+                        const zipBlob = await zip.generateAsync({ type: "blob" });
+                        const zipFile = new File([zipBlob], "attachments.zip", {type: "application/zip"})
+                        formData.append("attachments", zipFile);
+                    } catch (zipError) {
+                        console.error("Error zipping files:", zipError);
+                        alert("There was an issue processing your file uploads. Please try again.");
+                        return;
+                    }
+                    } else {
+                        console.log("No Attachments")
+                    // Optional: add empty string if no files were selected
+                        formData.append("attachments", "");
+                    }
+                   const recaptchaResponse = grecaptcha.getResponse();
+                   if (!recaptchaResponse) {
+                        const modal = document.getElementById("recaptchaModal");
+                        if (modal) modal.style.display = "flex";
+                        return;
+                    }
+                   fetch("https://hooks.zapier.com/hooks/catch/3709084/u2w7g2l/", {
+                       method: "POST",
+                       body: formData,
+                   })
+                   .then((response) => {
+                       if (response.ok) {
+                           form.innerHTML = "<p style='font-size: 1.2em;'>Thank you for your request! Someone will get back to you shortly.</p>";
+                        } else {
+                            alert("Something went wrong. Please try again.");
+                        }
+                   }).catch((error) => {
+                       console.error("Submission error:", error);
+                       alert("There was an error submitting the form.");
+                   });
+                });
+            }
+        });
+  </script>
+ </div>
