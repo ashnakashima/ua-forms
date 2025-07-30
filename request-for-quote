@@ -161,11 +161,14 @@
             if(form){
                 form.addEventListener("submit", async (e) => {
                    e.preventDefault(); //stops default submission
+                   const now = new Date();
+                   const yyyy = now.getFullYear();
+                   const mm = String(now.getMonth() + 1).padStart(2, '0');
+                   const dd = String(now.getDate()).padStart(2, '0');
+                   const timestamp = Date.now();
+                   const ticketID = `RFQ-${yyyy}-${mm}-${dd}-${timestamp}`;
                    const phoneValue = phoneInput.value.trim();
                     const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
-                    // Clear previous styling
-                    phoneInput.style.borderColor = "";
-                    // Validate format and show red border if invalid
                     if (!phonePattern.test(phoneValue)) {
                         alert("Please enter a valid phone number.")
                         phoneInput.focus();
@@ -173,6 +176,7 @@
                     }
                    const formData = new FormData(form);
                    formData.append("submittedAt", new Date().toISOString());
+                   formData.append("ticketID", ticketID)
                    const recaptchaResponse = grecaptcha.getResponse();
                    if (!recaptchaResponse) {
                         const modal = document.getElementById("recaptchaModal");
